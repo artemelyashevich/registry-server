@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  db-shared:
+    container_name: db
+    image: mysql:latest
+    ports:
+      - "5111:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_DATABASE: registry
+  app:
+    container_name: app
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      - db-shared
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-shared:3306/registry
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQL8Dialect
+    ports:
+      - "8222:8222"

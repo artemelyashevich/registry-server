@@ -32,11 +32,13 @@ public class SecurityConfig {
 
     private final TokenFilter filter;
     private final UserDetailsService userDetailsService;
+    private final CustomCorsConfig corsConfig;
 
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(this.corsConfig))
                 .authorizeHttpRequests(requests ->
                         requests
                                 .requestMatchers(
@@ -51,7 +53,6 @@ public class SecurityConfig {
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore(this.filter, UsernamePasswordAuthenticationFilter.class)
-                .cors(AbstractHttpConfigurer::disable)
                 .build();
     }
 

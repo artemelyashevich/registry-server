@@ -38,6 +38,7 @@ public class TokenFilter extends OncePerRequestFilter {
         String email = null;
         try {
             email = TokenUtil.extractEmailClaims(jwt);
+            request.setAttribute("email", email);
         } catch (Exception e) {
             throw new InvalidTokenException("Invalid token");
         }

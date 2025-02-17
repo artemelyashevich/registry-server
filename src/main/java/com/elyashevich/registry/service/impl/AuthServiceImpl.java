@@ -67,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void resetPassword(final ResetPasswordDto resetPasswordDto, final String email) {
         var oldUser = this.userService.findByEmail(email);
-        if (!this.passwordEncoder.matches(oldUser.getPassword(), resetPasswordDto.oldPassword())) {
+        if (!this.passwordEncoder.matches(resetPasswordDto.oldPassword(), oldUser.getPassword())) {
             log.warn("Incorrect password");
             throw new PasswordMismatchException("Password mismatch");
         }

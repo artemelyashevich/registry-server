@@ -8,11 +8,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173/")
 public class AuthController {
 
     private final AuthService authService;
@@ -51,7 +58,7 @@ public class AuthController {
     @PreAuthorize("#email == authentication.principal")
     public ResponseEntity<Void> resetPassword(
             final @Valid @RequestBody ResetPasswordDto dto,
-            final @RequestParam("email") String email
+            final @RequestAttribute("email") String email
     ) {
         this.authService.resetPassword(dto, email);
         return ResponseEntity.accepted().build();

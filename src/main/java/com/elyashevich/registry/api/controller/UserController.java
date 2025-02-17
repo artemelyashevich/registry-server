@@ -7,13 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +31,14 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> findById(final @PathVariable("id") UUID id) {
         var user = this.userService.findById(id);
+        var dto = this.userMapper.toDto(user);
+
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/current")
+    public ResponseEntity<UserDto> findByCurrentUser(final @RequestAttribute("email") String email) {
+        var user = this.userService.findByEmail(email);
         var dto = this.userMapper.toDto(user);
 
         return ResponseEntity.ok(dto);
